@@ -553,10 +553,8 @@ cd SwiftRide-Analytics
 # 2. Install dependencies
 pip install -r requirements.txt
 
-# 3. Generate the database (if swiftride.db doesn't exist)
-python generate_data.py
-
-# 4. Launch the dashboard
+# 3. Launch the dashboard
+#    (swiftride.db is pre-generated and included)
 streamlit run app.py
 ```
 
@@ -565,15 +563,16 @@ The app will open automatically at `http://localhost:8501`.
 ### First-Time Setup Diagram
 
 ```
-┌─────────────┐     ┌──────────────┐     ┌─────────────┐     ┌──────────────┐
-│  git clone  │───▶ │ pip install  │───▶ │ python       │───▶ │ streamlit    │
-│  the repo   │     │ -r req.txt   │     │ generate_    │     │ run app.py   │
-│             │     │              │     │ data.py      │     │              │
-│  ~5 seconds │     │  ~30 seconds │     │  ~10 seconds │     │  Opens browser │
-└─────────────┘     └──────────────┘     └─────────────┘     └──────────────┘
-     STEP 1              STEP 2              STEP 3              STEP 4
-                                                         
-                                                         ✅ Dashboard Live!
+┌─────────────┐     ┌──────────────┐     ┌──────────────┐
+│  git clone  │───▶ │ pip install  │───▶ │ streamlit    │
+│  the repo   │     │ -r req.txt   │     │ run app.py   │
+│             │     │              │     │              │
+│  ~5 seconds │     │  ~30 seconds │     │  Opens browser │
+└─────────────┘     └──────────────┘     └──────────────┘
+     STEP 1              STEP 2              STEP 3
+
+                                      ✅ Dashboard Live!
+                               (swiftride.db included)
 ```
 
 ---
@@ -609,15 +608,11 @@ Streamlit-app/
 │       ├── Live Fare Predictor (interactive inputs)
 │       └── Actual vs Predicted (scatter + diagonal)
 │
-├── generate_data.py            # Data generation script (creates swiftride.db)
-│   ├── 8 Pakistani cities
-│   ├── 150 drivers (realistic names, vehicles, ratings)
-│   ├── 800 riders
-│   ├── 7,000 trips (realistic pricing, surge, weather)
-│   ├── ~6,440 payments
-│   └── ~4,186 reviews
+├── generate_data.pdf           # Data generation specification (PDF, 4 pages)
+│                               # Describes schema, logic, and requirements
+│                               # for creating swiftride.db
 │
-├── swiftride.db                # SQLite database (generated, ~8MB)
+├── swiftride.db                # SQLite database (pre-generated, ~1.2MB)
 │
 ├── requirements.txt            # Python dependencies
 ├── prompt.pdf                  # Original project specification (4 pages)
@@ -630,19 +625,18 @@ Streamlit-app/
 
 ### Reproducibility
 
-The data generation script uses **NumPy seed 42** for deterministic output:
+The database was generated using **NumPy seed 42** for deterministic output.
+The specification lives in `generate_data.pdf` — a 4-page document describing
+the exact schema, data distribution, and fare logic used to create `swiftride.db`.
 
-```bash
-python generate_data.py
-```
+If you need to regenerate the database from scratch, follow the spec in
+`generate_data.pdf` and use `prompt.pdf` for the full project requirements.
 
-Every run produces the **exact same database** — critical for consistent demos and testing.
-
-### Generation Process
+### Database Contents (as generated per spec)
 
 ```
 ┌──────────────────────────────────────────────────────┐
-│              generate_data.py (seed=42)              │
+│         Database Specification (seed=42)             │
 ├──────────────────────────────────────────────────────┤
 │                                                      │
 │  1. cities  ──────────▶  8 rows                     │

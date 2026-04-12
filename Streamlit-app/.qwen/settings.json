@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(streamlit *)",
+      "Bash(sqlite3 *)",
+      "Read(//home/ayyan/project/SwiftRide-Analytics-Dashboard/**)"
+    ]
+  },
+  "$version": 3
+}

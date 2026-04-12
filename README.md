@@ -33,8 +33,20 @@ SwiftRide Analytics is a **single-file Streamlit web application** that transfor
 - **Machine learning fare prediction** using Random Forest
 - **Real-time SQL queries** against a local SQLite file
 - **Zero server setup** — runs entirely on your machine
+- **Custom UI styling** with Syne & DM Sans fonts, gradient sidebar, and polished KPI cards
 
 The app targets Pakistani ride-sharing data across **8 cities** with **150 drivers**, **800 riders**, and **7,000 trips** spanning 2023–2024.
+
+### Current Status
+
+| Component | Status |
+|-----------|--------|
+| `Streamlit-app/app.py` | ✅ 918-line production dashboard |
+| `Streamlit-app/generate_data.py` | ✅ 536-line deterministic data generator (seed=42) |
+| `Streamlit-app/swiftride.db` | ✅ Pre-built SQLite database (6 tables, FK relations) |
+| `Streamlit-app/requirements.txt` | ✅ Core dependencies pinned |
+| ML Model | ✅ RandomForestRegressor (n_estimators=100, 80/20 split) |
+| UI Theme | ✅ Custom CSS — dark gradient sidebar, Syne headings, KPI cards |
 
 ---
 
@@ -580,43 +592,48 @@ The app will open automatically at `http://localhost:8501`.
 ## 📁 Project Structure
 
 ```
-Streamlit-app/
+SwiftRide-Analytics-Dashboard/
 │
-├── app.py                      # Main Streamlit application (918 lines)
-│   ├── Page 1: Executive Overview
-│   │   ├── KPI Cards (5 metrics)
-│   │   ├── Monthly Revenue Trend (line chart)
-│   │   ├── Trips by City + Fleet Mix (bar + pie)
-│   │   └── City Summary Table
-│   │
-│   ├── Page 2: Trip Analytics
-│   │   ├── Demand Heatmap (hour × day)
-│   │   ├── Fare by Vehicle + Scatter (bar + scatter)
-│   │   ├── Peak vs Off-Peak (grouped bar)
-│   │   └── Rain Impact Analysis (metrics + info)
-│   │
-│   ├── Page 3: Driver Performance
-│   │   ├── Top 10 Leaderboard (table)
-│   │   ├── Rating by City + Earnings (bar charts)
-│   │   ├── Active Drivers Over Time (line + area)
-│   │   └── Rating Distribution (histogram)
-│   │
-│   └── Page 4: ML Fare Predictor
-│       ├── Model Training (RandomForest, cached)
-│       ├── Performance Metrics (R², MAE, RMSE)
-│       ├── Feature Importance (horizontal bar)
-│       ├── Live Fare Predictor (interactive inputs)
-│       └── Actual vs Predicted (scatter + diagonal)
-│
-├── generate_data.pdf           # Data generation specification (PDF, 4 pages)
-│                               # Describes schema, logic, and requirements
-│                               # for creating swiftride.db
-│
-├── swiftride.db                # SQLite database (pre-generated, ~1.2MB)
-│
-├── requirements.txt            # Python dependencies
-├── prompt.pdf                  # Original project specification (4 pages)
-└── README.md                   # This file
+└── Streamlit-app/
+    │
+    ├── app.py                      # Main Streamlit application (918 lines)
+    │   ├── Page 1: Executive Overview
+    │   │   ├── KPI Cards (5 metrics)
+    │   │   ├── Monthly Revenue Trend (line chart)
+    │   │   ├── Trips by City + Fleet Mix (bar + pie)
+    │   │   └── City Summary Table
+    │   │
+    │   ├── Page 2: Trip Analytics
+    │   │   ├── Demand Heatmap (hour × day)
+    │   │   ├── Fare by Vehicle + Scatter (bar + scatter)
+    │   │   ├── Peak vs Off-Peak (grouped bar)
+    │   │   └── Rain Impact Analysis (metrics + info)
+    │   │
+    │   ├── Page 3: Driver Performance
+    │   │   ├── Top 10 Leaderboard (table)
+    │   │   ├── Rating by City + Earnings (bar charts)
+    │   │   ├── Active Drivers Over Time (line + area)
+    │   │   └── Rating Distribution (histogram)
+    │   │
+    │   └── Page 4: ML Fare Predictor
+    │       ├── Model Training (RandomForest, cached)
+    │       ├── Performance Metrics (R², MAE, RMSE)
+    │       ├── Feature Importance (horizontal bar)
+    │       ├── Live Fare Predictor (interactive inputs)
+    │       └── Actual vs Predicted (scatter + diagonal)
+    │
+    ├── generate_data.py            # Deterministic data generator (536 lines, seed=42)
+    │                               # Creates swiftride.db from scratch with 6 tables
+    │
+    ├── generate_data.pdf           # Data generation specification (PDF, 4 pages)
+    │                               # Describes schema, logic, and requirements
+    │
+    ├── swiftride.db                # SQLite database (pre-generated, ~1.2MB)
+    │                               # 6 tables: cities, drivers, riders, trips, payments, reviews
+    │
+    ├── requirements.txt            # Python dependencies (6 packages)
+    ├── prompt.pdf                  # Original project specification (4 pages)
+    └── README.md                   # This file (Streamlit-app level)
 ```
 
 ---
@@ -625,12 +642,18 @@ Streamlit-app/
 
 ### Reproducibility
 
-The database was generated using **NumPy seed 42** for deterministic output.
-The specification lives in `generate_data.pdf` — a 4-page document describing
-the exact schema, data distribution, and fare logic used to create `swiftride.db`.
+The database can be generated using **NumPy seed 42** for deterministic output.
+The data generation script `generate_data.py` is included and can recreate `swiftride.db`
+from scratch. The specification also lives in `generate_data.pdf` — a 4-page document
+describing the exact schema, data distribution, and fare logic.
 
-If you need to regenerate the database from scratch, follow the spec in
-`generate_data.pdf` and use `prompt.pdf` for the full project requirements.
+```bash
+# Regenerate the database (optional — swiftride.db is pre-included)
+cd Streamlit-app
+python generate_data.py    # Creates/overwrites swiftride.db
+```
+
+If you need to understand the full project requirements, see `prompt.pdf`.
 
 ### Database Contents (as generated per spec)
 
